@@ -3,7 +3,7 @@ package practicum;
 import java.util.*;
 
 public class Algorithms {
-
+    
     /**
      * Отсортируйте список, НЕ используя методы стандартной библиотеки (напр. Collections.sort).
      */
@@ -21,7 +21,7 @@ public class Algorithms {
         }
         return List.of(arr);
     }
-
+    
     /**
      * Удалите дубликаты из списка.
      * <p>
@@ -34,10 +34,10 @@ public class Algorithms {
         if (list.size() == 0 || list.size() == 1) return list;
         List<Integer> result = new ArrayList<>();
         result.add(list.get(0));
-        for(int i = 1; i < list.size(); i++){
+        for (int i = 1; i < list.size(); i++) {
             boolean isDuplicate = false;
             for (int j = 0; j < result.size(); j++) {
-                if (list.get(i) == result.get(j)){
+                if (list.get(i) == result.get(j)) {
                     isDuplicate = true;
                     break;
                 }
@@ -46,7 +46,7 @@ public class Algorithms {
         }
         return result;
     }
-
+    
     /**
      * Проверьте, является ли список "палиндромом".
      * Палиндром -- это список, который в обе стороны читается одинаково.
@@ -58,13 +58,13 @@ public class Algorithms {
      */
     public static boolean isPalindrome(List<Integer> list) {
         for (int i = 0; i < list.size() / 2; i++) {
-            if (list.get(i) != list.get(list.size() - i - 1)){
+            if (list.get(i) != list.get(list.size() - i - 1)) {
                 return false;
             }
         }
         return true;
     }
-
+    
     /**
      * Объедините два отсортированных списка в один отсортированный список.
      * Например:
@@ -76,10 +76,33 @@ public class Algorithms {
      * Доп. условие: у алгоритма должна быть линейная сложность, O(n).
      */
     public static List<Integer> mergeSortedLists(List<Integer> a, List<Integer> b) {
-
-        return null;
+        int totalLength = a.size() + b.size();
+        Integer[] result = new Integer[totalLength];
+        int aPointer = 0;
+        int bPointer = 0;
+        for (int i = 0; i < totalLength; i++) {
+            if (aPointer == a.size()) {
+                for (int j = i; j < totalLength; j++) {
+                    result[j] = b.get(bPointer++);
+                }
+                break;
+            }
+            if (bPointer == b.size()) {
+                for (int j = i; j < totalLength; j++) {
+                    result[j] = a.get(aPointer++);
+                }
+                break;
+            }
+            
+            if (a.get(aPointer) < b.get(bPointer)) {
+                result[i] = a.get(aPointer++);
+            } else {
+                result[i] = b.get(bPointer++);
+            }
+        }
+        return List.of(result);
     }
-
+    
     /**
      * Проверьте, что в массиве нет дубликатов.
      * Верните true, если дубликатов нет, иначе false.
@@ -88,9 +111,13 @@ public class Algorithms {
      * (списки, массивы, хэш-таблицы, множества и т.п.).
      */
     public static boolean containsEveryElementOnce(int[] array) {
-        return false;
+        Arrays.sort(array);
+        for (int i = 0; i < array.length - 1; i++) {
+            if (array[i] == array[i + 1]) return false;
+        }
+        return true;
     }
-
+    
     /**
      * Определите, является ли один массив перестановкой другого.
      * Т.е. в массивах хранится один и тот же набор элементов, но (возможно) в разном порядке.
@@ -106,9 +133,29 @@ public class Algorithms {
      * [1 2] и [1 1 2] = false, разный набор элементов
      */
     public static boolean isPermutation(int[] a, int[] b) {
-        return false;
+        if (a.length == 0 && b.length == 0) return true;
+        if (a.length != b.length) return false;
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for (int i = 0; i < a.length; i++) {
+            if (map.containsKey(a[i])) {
+                map.put(a[i], map.get(a[i]) + 1);
+                continue;
+            }
+            map.put(a[i], 1);
+        }
+        
+        for (int i = 0; i < b.length; i++) {
+            if (map.containsKey(b[i])) {
+                if (map.get(b[i]) == 0) return false;
+                map.put(b[i], map.get(b[i]) - 1);
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
-
+    
     /**
      * Сложная задача.
      * <p>
@@ -127,6 +174,12 @@ public class Algorithms {
      * [6 4 2] ]
      */
     public static int[][] rotateRight(int[][] image) {
-        return null;
+        int[][] output = new int[image[0].length][image.length];
+        for (int i = 0; i < image.length; i++) {
+            for (int j = 0; j < image[0].length; j++) {
+                output[j][image.length - i - 1] = image[i][j];
+            }
+        }
+        return output;
     }
 }
